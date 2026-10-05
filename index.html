@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Фонетика әлемі – Дыбысты тап!</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #dbeafe, #ede9fe);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #26324a;
+    }
+
+    .game {
+        width: 90%;
+        max-width: 850px;
+        background: white;
+        border-radius: 25px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(60, 70, 120, 0.2);
+        text-align: center;
+    }
+
+    h1 {
+        color: #4f46a5;
+        margin-bottom: 8px;
+        font-size: 34px;
+    }
+
+    .subtitle {
+        color: #64748b;
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+
+    .score {
+        display: inline-block;
+        background: #eef2ff;
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-weight: bold;
+        color: #4338ca;
+        margin-bottom: 20px;
+    }
+
+    .question {
+        background: #f8fafc;
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 20px;
+    }
+
+    .sound {
+        font-size: 45px;
+        font-weight: bold;
+        color: #7c3aed;
+        margin: 15px;
+    }
+
+    .word {
+        font-size: 32px;
+        font-weight: bold;
+        color: #1e293b;
+        margin: 15px;
+    }
+
+    .answers {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    button {
+        border: none;
+        padding: 17px;
+        border-radius: 15px;
+        background: #e0e7ff;
+        color: #312e81;
+        font-size: 19px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    button:hover {
+        transform: scale(1.03);
+        background: #c7d2fe;
+    }
+
+    .correct {
+        background: #bbf7d0 !important;
+        color: #166534 !important;
+    }
+
+    .wrong {
+        background: #fecaca !important;
+        color: #991b1b !important;
+    }
+
+    #message {
+        font-size: 20px;
+        font-weight: bold;
+        min-height: 30px;
+        margin: 15px;
+    }
+
+    .next {
+        background: #7c3aed;
+        color: white;
+        margin-top: 10px;
+        padding: 14px 30px;
+    }
+
+    .next:hover {
+        background: #6d28d9;
+    }
+
+    .restart {
+        background: #475569;
+        color: white;
+        margin-top: 10px;
+    }
+
+    @media(max-width: 600px) {
+        .answers {
+            grid-template-columns: 1fr;
+        }
+
+        h1 {
+            font-size: 27px;
+        }
+
+        .word {
+            font-size: 27px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="game">
+
+    <h1>🔤 Фонетика әлемі</h1>
+
+    <div class="subtitle">
+        «Дыбысты тап!» ойыны
+    </div>
+
+    <div class="score">
+        ⭐ Ұпай: <span id="score">0</span>
+    </div>
+
+    <div class="question">
+
+        <div>Берілген сөзден мына дыбысты тап:</div>
+
+        <div class="sound" id="sound">А</div>
+
+        <div class="word" id="word">АЛМА</div>
+
+    </div>
+
+    <div class="answers" id="answers"></div>
+
+    <div id="message"></div>
+
+    <button class="next" onclick="nextQuestion()">
+        ➡️ Келесі тапсырма
+    </button>
+
+    <br>
+
+    <button class="restart" onclick="restartGame()">
+        🔄 Қайта бастау
+    </button>
+
+</div>
+
+<script>
+
+const questions = [
+
+    {
+        word: "АЛМА",
+        sound: "А",
+        answers: ["Дауысты", "Дауыссыз"],
+        correct: "Дауысты"
+    },
+
+    {
+        word: "КІТАП",
+        sound: "К",
+        answers: ["Дауысты", "Дауыссыз"],
+        correct: "Дауыссыз"
+    },
+
+    {
+        word: "АТА",
+        sound: "А",
+        answers: ["Дауысты", "Дауыссыз"],
+        correct: "Дауысты"
+    },
+
+    {
+        word: "БАЛА",
+        sound: "Б",
+        answers: ["Дауысты", "Дауыссыз"],
+        correct: "Дауыссыз"
+    },
+
+    {
+        word: "МЕКТЕП",
+        sound: "Е",
+        answers: ["Дауысты", "Дауыссыз"],
+        correct: "Дауысты"
+    },
+
+    {
+        word: "ДОП",
+        sound: "Д",
+        answers: ["Дауысты", "Дауыссыз"],
+        correct: "Дауыссыз"
+    },
+
+    {
+        word: "ӘЖЕ",
+        sound: "Ә",
+        answers: ["Дауысты", "Дауыссыз"],
+        correct: "Дауысты"
+    },
+
+    {
+        word: "ҚАЛАМ",
+        sound: "Қ",
+        answers: ["Дауысты", "Дауыссыз"],
+        correct: "Дауыссыз"
+    },
+
+    {
+        word: "ӨРІК",
+        sound: "Ө",
+        answers: ["Дауысты", "Дауыссыз"],
+        correct: "Дауысты"
+    },
+
+    {
+        word: "ГҮЛ",
+        sound: "Л",
+        answers: ["Дауысты", "Дауыссыз"],
+        correct: "Дауыссыз"
+    }
+
+];
+
+let current = 0;
+let score = 0;
+let answered = false;
+
+function showQuestion() {
+
+    answered = false;
+
+    let q = questions[current];
+
+    document.getElementById("word").textContent = q.word;
+    document.getElementById("sound").textContent = q.sound;
+
+    document.getElementById("message").textContent = "";
+
+    let answers = document.getElementById("answers");
+
+    answers.innerHTML = "";
+
+    q.answers.forEach(answer => {
+
+        let button = document.createElement("button");
+
+        button.textContent = answer;
+
+        button.onclick = function() {
+            checkAnswer(button, answer);
+        };
+
+        answers.appendChild(button);
+
+    });
+
+}
+
+function checkAnswer(button, answer) {
+
+    if (answered) return;
+
+    answered = true;
+
+    let correct = questions[current].correct;
+
+    if (answer === correct) {
+
+        button.classList.add("correct");
+
+        document.getElementById("message").textContent =
+            "🎉 Дұрыс! Жарайсың!";
+
+        score++;
+
+        document.getElementById("score").textContent = score;
+
+    } else {
+
+        button.classList.add("wrong");
+
+        document.getElementById("message").textContent =
+            "❌ Қате. Дұрыс жауап: " + correct;
+
+        let buttons = document.querySelectorAll("#answers button");
+
+        buttons.forEach(btn => {
+
+            if (btn.textContent === correct) {
+                btn.classList.add("correct");
+            }
+
+        });
+
+    }
+
+}
+
+function nextQuestion() {
+
+    current++;
+
+    if (current >= questions.length) {
+
+        document.querySelector(".question").innerHTML = `
+            <h2>🎊 Ойын аяқталды!</h2>
+            <div style="font-size:45px;">🏆</div>
+            <p style="font-size:24px;">
+                Сенің нәтижең: <b>${score}/${questions.length}</b>
+            </p>
+        `;
+
+        document.getElementById("answers").innerHTML = "";
+
+        document.getElementById("message").textContent =
+            score >= 8
+            ? "🌟 Өте жақсы! Фонетиканы жақсы меңгердің!"
+            : "👏 Жақсы! Тағы да қайталап көр!";
+
+        return;
+    }
+
+    showQuestion();
+}
+
+function restartGame() {
+
+    current = 0;
+    score = 0;
+
+    document.getElementById("score").textContent = score;
+
+    location.reload();
+
+}
+
+showQuestion();
+
+</script>
+
+</body>
+</html>
